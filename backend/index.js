@@ -1,11 +1,14 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const multer = require('multer');
-const { Pool } = require('pg');
-const { createClient } = require('@supabase/supabase-js');
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import multer from 'multer';
+import pkg from 'pg';
+import { createClient } from '@supabase/supabase-js';
+
+const { Pool } = pkg;
+dotenv.config();
 
 const app = express();
 app.use(cors());
