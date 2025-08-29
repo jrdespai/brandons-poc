@@ -1,6 +1,8 @@
 
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
@@ -137,32 +139,55 @@ function App() {
     if (user && token) fetchImages();
   }, [user, token]);
 
-  return (
+  return !user ? (
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-lg shadow p-6">
+        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
+        <form onSubmit={handleLogin} className="mb-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 placeholder-gray-400 mb-2"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 placeholder-gray-400 mb-2"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded w-full"
+            disabled={loading}
+          >
+            Login
+          </button>
+        </form>
+        {error && <div className="text-red-500 mb-2 text-center">{error}</div>}
+        <div className="text-center">
+          <Link to="/register" className="text-blue-500 underline">
+            Don't have an account? Register
+          </Link>
+        </div>
+      </div>
+    </div>
+) : (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow p-6">
         <h1 className="text-2xl font-bold mb-4 text-center">Image Manager</h1>
-        {!user ? (
-          <>
-            <form onSubmit={handleLogin} className="mb-4">
-              <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="input input-bordered w-full mb-2" required />
-              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="input input-bordered w-full mb-2" required />
-              <button type="submit" className="btn btn-primary w-full" disabled={loading}>Login</button>
-            </form>
-            <form onSubmit={handleRegister}>
-              <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="input input-bordered w-full mb-2" required />
-              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="input input-bordered w-full mb-2" required />
-              <button type="submit" className="btn btn-secondary w-full" disabled={loading}>Register</button>
-            </form>
-          </>
-        ) : (
-          <>
+
             <div className="flex justify-between items-center mb-4">
               <span>Welcome, {user.email}</span>
               <button onClick={handleLogout} className="btn btn-sm btn-outline">Logout</button>
             </div>
             <form onSubmit={handleUpload} className="mb-4">
               <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} className="file-input file-input-bordered w-full mb-2" />
-              <button type="submit" className="btn btn-primary w-full" disabled={loading}>Upload Image</button>
+              <button type="submit" className="" disabled={loading}>Upload Image</button>
             </form>
             <div>
               <h2 className="text-lg font-semibold mb-2">Your Images</h2>
@@ -177,8 +202,6 @@ function App() {
                 </div>
               )}
             </div>
-          </>
-        )}
         {error && <div className="text-red-500 mt-2 text-center">{error}</div>}
       </div>
     </div>
